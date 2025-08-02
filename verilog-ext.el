@@ -54,14 +54,20 @@
   :group 'languages
   :group 'verilog-mode)
 
+(defcustom verilog-ext-lsp-package 'lsp
+  "Which LSP package to use."
+  :type '(choice (const :tag "lsp-mode" lsp)
+                 (const :tag "eglot" eglot)
+                 (const :tag "lsp-bridge" lsp-bridge)
+                 (const :tag "lspce" lspce)
+                 (const :tag "None" nil))
+  :group 'verilog-ext)
+
 (defcustom verilog-ext-feature-list '(font-lock
                                       xref
                                       capf
                                       hierarchy
-                                      eglot
                                       lsp
-                                      lsp-bridge
-                                      lspce
                                       flycheck
                                       beautify
                                       navigation
@@ -84,14 +90,8 @@
                 capf)
               (const :tag "Hierarchy extraction and visualization."
                 hierarchy)
-              (const :tag "Setup LSP servers for `eglot'."
-                eglot)
-              (const :tag "Setup LSP servers for `lsp-mode'."
+              (const :tag "Setup LSP servers."
                 lsp)
-              (const :tag "Setup LSP servers for `lsp-bridge'."
-                lsp-bridge)
-              (const :tag "Setup LSP servers for `lspce'."
-                lspce)
               (const :tag "Setup linters for `flycheck'."
                 flycheck)
               (const :tag "Code beautifying functions."
@@ -194,17 +194,12 @@ FEATURES can be a single feature or a list of features."
 (verilog-ext-when-feature 'flycheck
   (require 'verilog-ext-flycheck))
 
-(verilog-ext-when-feature 'eglot
-  (require 'verilog-ext-eglot))
-
 (verilog-ext-when-feature 'lsp
-  (require 'verilog-ext-lsp))
-
-(verilog-ext-when-feature 'lsp-bridge
-  (require 'verilog-ext-lsp-bridge))
-
-(verilog-ext-when-feature 'lspce
-  (require 'verilog-ext-lspce))
+  (pcase verilog-ext-lsp-package
+    ('lsp (require 'verilog-ext-lsp))
+    ('eglot (require 'verilog-ext-eglot))
+    ('lsp-bridge (require 'verilog-ext-lsp-bridge))
+    ('lspce (require 'verilog-ext-lspce))))
 
 
 ;;; Major-mode
@@ -264,15 +259,13 @@ FEATURES can be a single feature or a list of features."
     (verilog-ext-tags-setup))
   (verilog-ext-when-feature 'hierarchy
     (verilog-ext-hierarchy-setup))
-  (verilog-ext-when-feature 'eglot
-    (verilog-ext-eglot-set-server verilog-ext-eglot-default-server))
   (verilog-ext-when-feature 'lsp
-    (verilog-ext-lsp-setup)
-    (verilog-ext-lsp-set-server verilog-ext-lsp-mode-default-server))
-  (verilog-ext-when-feature 'lsp-bridge
-    (verilog-ext-lsp-bridge-set-server verilog-ext-lsp-bridge-default-server))
-  (verilog-ext-when-feature 'lspce
-    (verilog-ext-lspce-set-server verilog-ext-lspce-default-server))
+    (pcase verilog-ext-lsp-package
+      ('lsp (verilog-ext-lsp-setup)
+           (verilog-ext-lsp-set-server verilog-ext-lsp-mode-default-server))
+      ('eglot (verilog-ext-eglot-set-server verilog-ext-eglot-default-server))
+      ('lsp-bridge (verilog-ext-lsp-bridge-set-server verilog-ext-lsp-bridge-default-server))
+      ('lspce (verilog-ext-lspce-set-server verilog-ext-lspce-default-server))))
   (verilog-ext-when-feature 'flycheck
     (verilog-ext-flycheck-setup))
   (verilog-ext-when-feature 'template
