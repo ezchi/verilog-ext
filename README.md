@@ -17,7 +17,6 @@ and [`verilog-ts-mode`](https://github.com/gmlarumbe/verilog-ts-mode).
 * [Find definitions and references](#find-definitions-and-references)
 * [Auto-completion with dot and scope completion](#auto-completion)
 * [Hierarchy extraction and navigation](#hierarchy-extraction)
-* [LSP configuration for `lsp-bridge`, `lsp-mode`,`eglot` and `lspce`](#language-server-protocol)
 * [Support for many linters via `flycheck`](#linting)
 * [Beautify modules and instances](#beautify-instances)
 * [Code navigation functions for RTL and Verification environments](#navigation)
@@ -72,10 +71,6 @@ By default all features are enabled:
         xref
         capf
         hierarchy
-        eglot
-        lsp
-        lsp-bridge
-        lspce
         flycheck
         beautify
         navigation
@@ -107,10 +102,6 @@ If installed and loaded via `use-package`:
           xref
           capf
           hierarchy
-          eglot
-          lsp
-          lsp-bridge
-          lspce
           flycheck
           beautify
           navigation
@@ -250,18 +241,6 @@ Hierarchy extraction of module at current buffer.
 
 For configuration information, see the [wiki](https://github.com/gmlarumbe/verilog-ext/wiki/Hierarchy).
 
-
-## Language Server Protocol ##
-
-Auto-configure various SystemVerilog language servers for `lsp-bridge`, `lsp-mode`, `eglot` and `lspce`:
-
-- [hdl_checker](https://github.com/suoto/hdl_checker)
-- [svlangserver](https://github.com/imc-trading/svlangserver)
-- [verible](https://github.com/chipsalliance/verible/tree/master/verilog/tools/ls)
-- [svls](https://github.com/dalance/svls)
-- [veridian](https://github.com/vivekmalneedi/veridian)
-
-For configuration instructions, see the [wiki](https://github.com/gmlarumbe/verilog-ext/wiki/Language-Server-Protocol)
 
 ## Linting ##
 Support via `flycheck` for the following linters:

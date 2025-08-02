@@ -6,7 +6,7 @@
 ;; URL: https://github.com/gmlarumbe/verilog-ext
 ;; Version: 0.7.0
 ;; Keywords: Verilog, IDE, Tools
-;; Package-Requires: ((emacs "29.1") (verilog-mode "2024.3.1.121933719") (verilog-ts-mode "0.4.0") (lsp-mode "8.0.0") (ag "0.48") (ripgrep "0.4.0") (hydra "0.15.0") (apheleia "3.1") (yasnippet "0.14.0") (flycheck "32") (async "1.9.7"))
+;; Package-Requires: ((emacs "29.1") (verilog-mode "2024.3.1.121933719") (verilog-ts-mode "0.4.0") (ag "0.48") (ripgrep "0.4.0") (hydra "0.15.0") (apheleia "3.1") (yasnippet "0.14.0") (flycheck "32") (async "1.9.7"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 ;;  - Find definitions and references with builtin `xref' backend
 ;;  - Auto-completion with dot and scope completion
 ;;  - Hierarchy extraction and navigation
-;;  - LSP configuration for `lsp-bridge', `lsp-mode', `eglot' and `lspce'
+;;  - LSP configuration for `lsp-bridge'
 ;;  - Support for many linters via `flycheck'
 ;;  - Beautify modules and instances
 ;;  - Code navigation functions for RTL and Verification environments
@@ -53,15 +53,6 @@
   "Verilog Extensions."
   :group 'languages
   :group 'verilog-mode)
-
-(defcustom verilog-ext-lsp-package 'lsp
-  "Which LSP package to use."
-  :type '(choice (const :tag "lsp-mode" lsp)
-                 (const :tag "eglot" eglot)
-                 (const :tag "lsp-bridge" lsp-bridge)
-                 (const :tag "lspce" lspce)
-                 (const :tag "None" nil))
-  :group 'verilog-ext)
 
 (defcustom verilog-ext-feature-list '(font-lock
                                       xref
@@ -195,11 +186,7 @@ FEATURES can be a single feature or a list of features."
   (require 'verilog-ext-flycheck))
 
 (verilog-ext-when-feature 'lsp
-  (pcase verilog-ext-lsp-package
-    ('lsp (require 'verilog-ext-lsp))
-    ('eglot (require 'verilog-ext-eglot))
-    ('lsp-bridge (require 'verilog-ext-lsp-bridge))
-    ('lspce (require 'verilog-ext-lspce))))
+  (require 'verilog-ext-lsp-bridge))
 
 
 ;;; Major-mode
@@ -260,12 +247,7 @@ FEATURES can be a single feature or a list of features."
   (verilog-ext-when-feature 'hierarchy
     (verilog-ext-hierarchy-setup))
   (verilog-ext-when-feature 'lsp
-    (pcase verilog-ext-lsp-package
-      ('lsp (verilog-ext-lsp-setup)
-           (verilog-ext-lsp-set-server verilog-ext-lsp-mode-default-server))
-      ('eglot (verilog-ext-eglot-set-server verilog-ext-eglot-default-server))
-      ('lsp-bridge (verilog-ext-lsp-bridge-set-server verilog-ext-lsp-bridge-default-server))
-      ('lspce (verilog-ext-lspce-set-server verilog-ext-lspce-default-server))))
+    (verilog-ext-lsp-bridge-set-server verilog-ext-lsp-bridge-default-server))
   (verilog-ext-when-feature 'flycheck
     (verilog-ext-flycheck-setup))
   (verilog-ext-when-feature 'template
