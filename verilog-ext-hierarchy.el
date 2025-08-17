@@ -321,7 +321,7 @@ Return populated `hierarchy' struct."
          (buf-err verilog-ext-hierarchy-vhier-shell-cmds-buffer-name)
          (err-msg (format "vhier returned with errors\nCheck %s buffer" buf-err))
          (cmd (mapconcat #'identity
-                         `("vhier" ,vhier-args ,library-args
+                         `("/opt/homebrew/Cellar/perl/5.40.2/bin/vhier" ,vhier-args ,library-args
                            ,(when command-file (mapconcat #'identity `("-f " ,command-file)))
                            ,input-files ,buffer-file-name
                            "--top-module" ,module)

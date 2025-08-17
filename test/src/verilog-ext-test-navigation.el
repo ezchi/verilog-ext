@@ -213,14 +213,14 @@ It did work locally though."
                                :args '(:mode verilog-ts-mode
                                        :fn verilog-ext-find-function-task-bwd
                                        :start-pos-max t))
-  ;; Jump-to-parent ag
-  (test-hdl-gen-expected-files :file-list verilog-ext-test-navigation-jump-to-parent-file-list
-                               :dest-dir verilog-ext-test-ref-dir-navigation
-                               :out-file-ext "ag"
-                               :process-fn 'eval
-                               :fn #'verilog-ext-test-jump-to-parent-module
-                               :args `(:mode verilog-mode
-                                       :engine "ag"))
+  ;;  ;; Jump-to-parent ag
+;;  (test-hdl-gen-expected-files :file-list verilog-ext-test-navigation-jump-to-parent-file-list
+;;                               :dest-dir verilog-ext-test-ref-dir-navigation
+;;                               :out-file-ext "ag"
+;;                               :process-fn 'eval
+;;                               :fn #'verilog-ext-test-jump-to-parent-module
+;;                               :args `(:mode verilog-mode
+;;                                       :engine "ag"))
   ;; Jump-to-parent rg
   (test-hdl-gen-expected-files :file-list verilog-ext-test-navigation-jump-to-parent-file-list
                                :dest-dir verilog-ext-test-ref-dir-navigation

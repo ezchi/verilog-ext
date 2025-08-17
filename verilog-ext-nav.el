@@ -974,21 +974,21 @@ after the search has been done."
     (cond
      ;; Try ripgrep
      ((and (string= verilog-ext-jump-to-parent-module-engine "rg")
-           (executable-find "rg"))
+           (file-exists-p "/opt/homebrew/bin/rg"))
       (let ((rg-extra-args '("-t" "verilog" "--pcre2" "--multiline" "--stats")))
         (setq verilog-ext-jump-to-parent-module-point-marker (point-marker))
         (setq verilog-ext-jump-to-parent-trigger t)
-        (ripgrep-regexp module-instance-pcre proj-dir rg-extra-args)))
+        (apply 'call-process "/opt/homebrew/bin/rg" nil (get-buffer-create "*rg-output*") nil (append rg-extra-args (list module-instance-pcre proj-dir)))))
      ;; Try ag
      ((and (string= verilog-ext-jump-to-parent-module-engine "ag")
-           (executable-find "ag"))
+           (file-exists-p "/opt/homebrew/bin/ag"))
       (let ((ag-arguments ag-arguments)
             (extra-ag-args '("--verilog" "--stats")))
         (dolist (extra-ag-arg extra-ag-args)
           (add-to-list 'ag-arguments extra-ag-arg :append))
         (setq verilog-ext-jump-to-parent-module-point-marker (point-marker))
         (setq verilog-ext-jump-to-parent-trigger t)
-        (ag-regexp module-instance-pcre proj-dir)))
+        (apply 'call-process "/opt/homebrew/bin/ag" nil (get-buffer-create "*ag-output*") nil (append ag-arguments (list module-instance-pcre proj-dir)))))
      ;; Fallback
      (t
       (error "Did not find `rg' nor `ag' in $PATH")))))
@@ -1009,7 +1009,7 @@ Kill the buffer if there is only one match."
           (num-matches))
       (save-excursion
         (goto-char (point-min))
-        (re-search-forward "^\\([0-9]+\\) matches\\s-*$" nil :noerror)
+        (re-search-forward "^[0-9]+\s-* matches\s-*$" nil :noerror)
         (setq num-matches (string-to-number (match-string-no-properties 1))))
       (cond ((eq num-matches 1)
              (xref-push-marker-stack verilog-ext-jump-to-parent-module-point-marker)
