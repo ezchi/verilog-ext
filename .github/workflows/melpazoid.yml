@@ -24,6 +24,9 @@ jobs:
         sudo apt-get install emacs && emacs --version
         git clone https://github.com/riscy/melpazoid.git ~/melpazoid
         pip install ~/melpazoid
+    - name: Install tree-sitter-cli
+      run: |
+        npm install -g tree-sitter-cli
     - name: Run
       env:
         LOCAL_REPO: ${{ github.workspace }}

@@ -29,6 +29,14 @@ jobs:
         with:
           submodules: true
 
+      - name: Cache elpa packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.emacs.d/elpa
+          key: elpa-${{ matrix.emacs_version }}-${{ hashFiles('*.el') }}
+          restore-keys: |
+            elpa-${{ matrix.emacs_version }}-
+
       - name: Install binaries
         run: |
           test/test-hdl/scripts/verilog/setup-env.sh
